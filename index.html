@@ -1,0 +1,96 @@
+<html>
+    <head>
+        <title>Lab 9: Vega-lite</title>
+        <meta charset="utf-8"/>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.1"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.18.2"></script>
+
+        <style media="screen">
+        /* Add space between Vega-Embed links  */
+        .vega-actions a {
+            margin-right: 5px;
+        }
+        </style>
+        <style>
+            h1 {
+                margin: 10px;
+                margin-bottom: 10px;
+                color: black;
+                font-weight: bold;
+            }
+             #vis {
+                margin: 10px;
+             }
+        </style>
+    </head>
+    <body>
+        <h1>The COVID Tracking Project</h1>
+        <div id = "vis"></div>
+        <script>
+            var visSpec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "description": "Lab 9: Vega-Lite",
+                "data": {"url": "https://raw.githubusercontent.com/bcviscourse/datasets/master/lab9-covidtracking.csv"},
+                "vconcat": [{
+                    "width": 500,
+                    "mark": {"type": "point"},
+                    "params": [{
+                    "name":"brush",
+                    "select": {"type": "interval"}
+                    }],
+                    "encoding": {
+                    "x": {
+                        "field": "positive",
+                        "type": "quantitative",
+                        "scale": {"zero": false}
+                    },
+                    "y": {
+                        "field": "death",
+                        "type": "quantitative",
+                        "scale": {"zero": false}
+                    },
+                    "color": {
+                        "condition": {
+                        "param": "brush",
+                        "field": "dataQualityGrade", 
+                        "type": "ordinal",
+                        "scale": {"scheme": "tableau10"}
+                        },
+                        "value": "grey"
+                    },
+                    "tooltip": {
+                        "field": "state",
+                        "type": "nominal"
+                    }
+                    }
+                }, {
+                    "repeat": ["hospitalizedCumulative", "recovered"],
+                    "columns": 1,
+                    "spec": {
+                    "width": 500,
+                    "mark": {"type": "bar"},
+                    "encoding": {
+                        "x": {
+                        "field": "state",
+                        "type": "nominal"
+                        },
+                        "y":{
+                            "field": {"repeat":"repeat"},
+                            "type": "quantitative"
+                        }
+                    },
+                    "transform": [{
+                        "filter": {"param":"brush"}
+                    }]
+                    }
+                }]
+            }
+
+            vegaEmbed('#vis', visSpec)
+        </script>
+    </body>
+</html>
