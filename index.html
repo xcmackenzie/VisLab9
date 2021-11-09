@@ -71,21 +71,22 @@
                     "repeat": ["hospitalizedCumulative", "recovered"],
                     "columns": 1,
                     "spec": {
-                    "width": 500,
-                    "mark": {"type": "bar"},
-                    "encoding": {
-                        "x": {
-                        "field": "state",
-                        "type": "nominal"
+                        "width": 500,
+                        "height": 100,
+                        "mark": {"type": "bar"},
+                        "encoding": {
+                            "x": {
+                            "field": "state",
+                            "type": "nominal"
+                            },
+                            "y":{
+                                "field": {"repeat":"repeat"},
+                                "type": "quantitative"
+                            }
                         },
-                        "y":{
-                            "field": {"repeat":"repeat"},
-                            "type": "quantitative"
-                        }
-                    },
-                    "transform": [{
-                        "filter": {"param":"brush"}
-                    }]
+                        "transform": [{
+                            "filter": {"param":"brush"}
+                        }]
                     }
                 }]
             }
